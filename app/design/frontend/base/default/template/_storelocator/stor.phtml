@@ -1,0 +1,130 @@
+
+
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-rows: 80px 80px;
+        grid-template-columns: 185px 1fr 1fr 185px;
+        grid-gap: 3px;
+    }
+
+    #grid > div {
+        padding: .5em;
+        text-align: center;
+    }
+
+    .item1 {
+        grid-row-start: 1;
+        grid-column-start: 1;
+        grid-row-end: 2;
+        grid-column-end: 5;
+        background-color: #eceef6;
+        text-align: center;
+    }
+
+    .item2 {
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-row-end: 2;
+        grid-column-end: 5;
+        background-color: white;
+    }
+
+    .item3 {
+        grid-row-start: 3;
+        grid-column-start: 1;
+        grid-row-end: 4;
+        grid-column-end: 2;
+        background-color: #eceef6;
+    }
+
+    .item4 {
+        grid-row-start: 3;
+        grid-column-start: 2;
+        grid-row-end: 4;
+        grid-column-end: 5;
+        background-color: white;
+    }
+
+    #map {
+        height: 800px;
+        width: 500px;
+        background-color: grey;
+    }
+
+</style>
+
+
+<div class="grid">
+
+    <div class="item1">  <h1>Stores Locator</h1></div>
+    <div class="item2">  </div>
+    <div class="item3">
+        <ul>
+            <li>
+                            <span class="j-store-element" data-id="23">
+                                Slater Menswear Aberdeen                            </span>
+            </li>
+            <li>
+                            <span class="j-store-element" data-id="116">
+                                Slater Menswear Ayr                            </span>
+            </li>
+            <li>
+                            <span class="j-store-element" data-id="117">
+                                Slater Menswear Basingstoke                            </span>
+            </li>
+        </ul>
+    </div>
+    <div class="item4" id="map">
+
+
+    </div>
+</div>
+
+<script>
+    function initMap() {
+        var center = {lat: 34.052235, lng: -118.243683};
+        var locations = [
+            ['Philz Coffee<br>\
+    801 S Hope St A, Los Angeles, CA 90017<br>\
+   <a href="https://goo.gl/maps/L8ETMBt7cRA2">Get Directions</a>',   34.046438, -118.259653],
+            ['Philz Coffee<br>\
+    525 Santa Monica Blvd, Santa Monica, CA 90401<br>\
+   <a href="https://goo.gl/maps/PY1abQhuW9C2">Get Directions</a>', 34.017951, -118.493567],
+            ['Philz Coffee<br>\
+    146 South Lake Avenue #106, At Shoppers Lane, Pasadena, CA 91101<br>\
+    <a href="https://goo.gl/maps/eUmyNuMyYNN2">Get Directions</a>', 34.143073, -118.132040],
+            ['Philz Coffee<br>\
+    21016 Pacific Coast Hwy, Huntington Beach, CA 92648<br>\
+    <a href="https://goo.gl/maps/Cp2TZoeGCXw">Get Directions</a>', 33.655199, -117.998640],
+            ['Philz Coffee<br>\
+    252 S Brand Blvd, Glendale, CA 91204<br>\
+   <a href="https://goo.gl/maps/WDr2ef3ccVz">Get Directions</a>', 34.142823, -118.254569]
+        ];
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 9,
+            center: center
+        });
+        var infowindow =  new google.maps.InfoWindow({});
+        var marker, count;
+        for (count = 0; count < locations.length; count++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[count][1], locations[count][2]),
+                map: map,
+                title: locations[count][0]
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, count) {
+                return function () {
+                    infowindow.setContent(locations[count][0]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, count));
+        }
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-EiMRj3eD06X_IWL3ZJvDjyRJEwCE95Y&callback=initMap"></script>
+
+
+

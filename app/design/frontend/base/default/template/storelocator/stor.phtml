@@ -1,0 +1,129 @@
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<style>
+    .grid {
+        display: grid;
+        grid-template-rows: 80px 80px;
+        grid-template-columns: 185px 1fr 1fr 185px;
+        grid-gap: 3px;
+    }
+    #grid > div {
+        padding: .5em;
+        text-align: center;
+    }
+    .item1 {
+        grid-row-start: 1;
+        grid-column-start: 1;
+        grid-row-end: 2;
+        grid-column-end: 5;
+        background-color: #eceef6;
+        text-align: center;
+    }
+    .item2 {
+        grid-row-start: 2;
+        grid-column-start: 1;
+        grid-row-end: 2;
+        grid-column-end: 5;
+        background-color: white;
+    }
+    .item3 {
+        grid-row-start: 3;
+        grid-column-start: 1;
+        grid-row-end: 4;
+        grid-column-end: 2;
+        background-color: #eceef6;
+    }
+
+    .item4 {
+        grid-row-start: 3;
+        grid-column-start: 2;
+        grid-row-end: 4;
+        grid-column-end: 5;
+        background-color: white;
+    }
+
+    #map {
+        height: 800px;
+        width: 500px;
+        background-color: grey;
+    }
+    .fade {
+        opacity: 0.6;
+    }
+
+    .fade:hover {
+        opacity: 1;
+    }
+</style>
+
+<div class="grid">
+
+    <div class="item1">  <h1>Stores Locator</h1></div>
+    <div class="item2">  </div>
+    <div class="item3">
+        <?php foreach($this->getStorses() as $store):?>
+            <div class="storelocator">
+                <div class="fade store-title" data-id = "<?php echo $store->getId()?>" ></div>
+                <a href="/store-locator/StoreLocator/information"><?php echo $store->getTitle()?></a>
+            </div>
+        <?php endforeach;?>
+    </div>
+    <div class="item4" id="map">
+    </div>
+</div>
+
+<script>
+    var locations = [
+        ['SLATER MENSWEAR ABERDEEN',   34.046438, -118.259653],
+        ['SLATER MENSWEAR AYR', 34.017951, -118.493567],
+        ['SLATER MENSWEAR BASINGSTOKE', 34.143073, -118.132040],
+        ['SLATER MENSWEAR BIRMINGHAM', 33.655199, -117.998640],
+        ['SLATER MENSWEAR CARDIFF', 34.655199, -118.998640],
+    ];
+    function initMap() {
+
+
+        var center = {lat: 34.052235, lng: -118.243683};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 9,
+            center: center
+        });
+        var infowindow =  new google.maps.InfoWindow({});
+        var marker, count;
+        for (count = 0; count < locations.length; count++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(locations[count][1], locations[count][2]),
+                map: map,
+                title: locations[count][0]
+            });
+            google.maps.event.addListener(marker, 'click', (function (marker, count) {
+                return function () {
+                    infowindow.setContent(locations[count][0]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, count));
+        }
+    }
+
+
+    $("div.fade").hover(function () {
+
+        var id = $(this).data('id');
+        toggleBounce(locations[id]);
+    });
+
+    function toggleBounce(locations) {
+        var marker;
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(locations[1], locations[2]),
+            map: map,
+            title: locations[0]
+        });
+       /* marker.mouseOver;*/
+    }
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-EiMRj3eD06X_IWL3ZJvDjyRJEwCE95Y&callback=initMap"></script>
